@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* 基础容器样式 */
+      .question-guide-container {
+        background-color: #f5f7fa; /* 浅灰色背景 */
+        padding: 40px 20px;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* 内容区域约束 */
+      .content-wrapper {
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      /* 提示语样式 */
+      .prompt-text {
+        text-align: center;
+        color: #606266; /* 深灰色文字 */
+        font-size: 20px;
+        font-weight: 500;
+        margin-bottom: 32px;
+      }
+
+      /* 按钮容器布局 */
+      .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 24px; /* 按钮间距 */
+        flex-wrap: wrap; /* 响应式换行 */
+      }
+
+      /* 按钮核心样式 */
+      .guide-button {
+        padding: 12px 24px;
+        background-color: #409eff; /* 主题蓝色 */
+        color: white !important;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 细微投影 */
+      }
+
+      /* 交互状态 */
+      .guide-button:hover {
+        background-color: #337ecc; /* 深蓝色 */
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .guide-button:active {
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="question-guide-container">
+      <div class="content-wrapper">
+        <div class="prompt-text">试着问问</div>
+        <div class="button-group">
+          <button class="guide-button">你能做什么？</button>
+          <button class="guide-button">今天天气如何？</button>
+          <button class="guide-button">你是机器人吗？</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

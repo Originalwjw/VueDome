@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      body {
+        background: #f5f6fa;
+        font-family: Arial, sans-serif;
+      }
+      .father {
+        max-width: 400px;
+        margin: 40px auto;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        padding: 24px 20px 16px 20px;
+        outline: none;
+        transition: border 0.2s;
+      }
+      .father:focus-within {
+        border: 1.5px solid #1c64f2;
+        box-shadow: 0 0 0 2px #1c64f233;
+      }
+      .father > div:last-child {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      textarea {
+        flex: 1;
+        resize: none;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 8px 10px;
+        font-size: 15px;
+        outline: none;
+        transition: border 0.2s;
+        background: #f8fafc;
+        min-height: 32px;
+        max-height: 80px;
+      }
+      textarea:focus {
+        border: 1.5px solid #1c64f2;
+        background: #fff;
+      }
+      .img-preview-wrapper {
+        position: relative;
+        display: inline-block;
+      }
+      .img-preview {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #eee;
+        margin-bottom: 10px;
+        display: block;
+      }
+      .delete-btn {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 20px;
+        height: 20px;
+        background: transparent;
+        border: none;
+        color: #e74c3c;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 14px;
+        z-index: 2;
+        box-shadow: none;
+        transition: background 0.2s, color 0.2s, border 0.2s;
+        padding: 0;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .img-preview-wrapper:hover .delete-btn {
+        opacity: 1;
+        pointer-events: auto;
+        background: #fff;
+        border: 1.5px solid #e74c3c;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      }
+      #img-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+    </style>
+    <div class="father" tabindex="0">
+      <div id="img-container"></div>
+      <div>
+        <textarea placeholder="Talk to Bot" id="my-textarea"></textarea>
+        <button type="button">
+          <svg
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+          >
+            <path
+              d="M3 12.9999H9V10.9999H3V1.84558C3 1.56944 3.22386 1.34558 3.5 1.34558C3.58425 1.34558 3.66714 1.36687 3.74096 1.40747L22.2034 11.5618C22.4454 11.6949 22.5337 11.9989 22.4006 12.2409C22.3549 12.324 22.2865 12.3924 22.2034 12.4381L3.74096 22.5924C3.499 22.7255 3.19497 22.6372 3.06189 22.3953C3.02129 22.3214 3 22.2386 3 22.1543V12.9999Z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <script>
+      const maximg = 3; // 最多粘贴图片数
+      const textarea = document.getElementById("my-textarea");
+      const imgContainer = document.getElementById("img-container");
+      let imgList = [];
+
+      textarea.addEventListener("paste", function (e) {
+        const items = e.clipboardData && e.clipboardData.items;
+        if (!items) return;
+        let added = 0;
+        for (let i = 0; i < items.length; i++) {
+          if (imgList.length >= maximg) break;
+          const item = items[i];
+          if (item.type.indexOf("image") !== -1) {
+            const file = item.getAsFile();
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              if (imgList.length < maximg) {
+                imgList.push(event.target.result);
+                renderImgs();
+              }
+            };
+            reader.readAsDataURL(file);
+            added++;
+          }
+        }
+        if (added > 0) e.preventDefault();
+      });
+
+      function renderImgs() {
+        imgContainer.innerHTML = "";
+        imgList.forEach((src, idx) => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "img-preview-wrapper";
+
+          const img = document.createElement("img");
+          img.src = src;
+          img.className = "img-preview";
+
+          const delBtn = document.createElement("button");
+          delBtn.className = "delete-btn";
+          delBtn.type = "button";
+          delBtn.title = "删除";
+          delBtn.innerHTML = "&times;";
+          delBtn.onclick = function () {
+            imgList.splice(idx, 1);
+            renderImgs();
+          };
+
+          wrapper.appendChild(img);
+          wrapper.appendChild(delBtn);
+          imgContainer.appendChild(wrapper);
+        });
+      }
+    </script>
+  </body>
+</html>
